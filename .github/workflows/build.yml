@@ -105,7 +105,7 @@ jobs:
         with:
           context: ${{ matrix.file_tag.context }}
           file: ${{ matrix.file_tag.file }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ env.GHCR_REPO }}:${{ matrix.file_tag.tag_suffix }}
