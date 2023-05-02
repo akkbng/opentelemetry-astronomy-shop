@@ -30,13 +30,13 @@ services:
   # ******************
   # Accounting service
   accountingservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-accountingservice
+    image: ${IMAGE_NAME}:accountingservice
     container_name: accounting-service
     build:
       context: ./
       dockerfile: ./src/accountingservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-accountingservice
+        - ${IMAGE_NAME}:accountingservice
     deploy:
       resources:
         limits:
@@ -58,13 +58,13 @@ services:
 
   # AdService
   adservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-adservice
+    image: ${IMAGE_NAME}:adservice
     container_name: ad-service
     build:
       context: ./
       dockerfile: ./src/adservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-adservice
+        - ${IMAGE_NAME}:adservice
     deploy:
       resources:
         limits:
@@ -86,13 +86,13 @@ services:
 
   # Cart service
   cartservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-cartservice
+    image: ${IMAGE_NAME}:cartservice
     container_name: cart-service
     build:
       context: ./
       dockerfile: ./src/cartservice/src/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-cartservice
+        - ${IMAGE_NAME}:cartservice
     deploy:
       resources:
         limits:
@@ -114,13 +114,13 @@ services:
 
   # Checkout service
   checkoutservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-checkoutservice
+    image: ${IMAGE_NAME}:checkoutservice
     container_name: checkout-service
     build:
       context: ./
       dockerfile: ./src/checkoutservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-checkoutservice
+        - ${IMAGE_NAME}:checkoutservice
     deploy:
       resources:
         limits:
@@ -163,12 +163,12 @@ services:
 
   # Currency service
   currencyservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-currencyservice
+    image: ${IMAGE_NAME}:currencyservice
     container_name: currency-service
     build:
       context: ./src/currencyservice
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-currencyservice
+        - ${IMAGE_NAME}:currencyservice
       args:
         - GRPC_VERSION=1.46.0
         - OPENTELEMETRY_VERSION=1.5.0
@@ -189,12 +189,12 @@ services:
 
   # Email service
   emailservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-emailservice
+    image: ${IMAGE_NAME}:emailservice
     container_name: email-service
     build:
       context: ./src/emailservice
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-emailservice
+        - ${IMAGE_NAME}:emailservice
     deploy:
       resources:
         limits:
@@ -214,13 +214,13 @@ services:
 
   # Feature Flag service
   featureflagservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-featureflagservice
+    image: ${IMAGE_NAME}:featureflagservice
     container_name: feature-flag-service
     build:
       context: ./
       dockerfile: ./src/featureflagservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-featureflagservice
+        - ${IMAGE_NAME}:featureflagservice
     deploy:
       resources:
         limits:
@@ -246,13 +246,13 @@ services:
 
   # Fraud Detection service
   frauddetectionservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-frauddetectionservice
+    image: ${IMAGE_NAME}:frauddetectionservice
     container_name: frauddetection-service
     build:
       context: ./
       dockerfile: ./src/frauddetectionservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-frauddetectionservice
+        - ${IMAGE_NAME}:frauddetectionservice
     deploy:
       resources:
         limits:
@@ -274,13 +274,13 @@ services:
 
   # Frontend
   frontend:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-frontend
+    image: ${IMAGE_NAME}:frontend
     container_name: frontend
     build:
       context: ./
       dockerfile: ./src/frontend/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-frontend
+        - ${IMAGE_NAME}:frontend
     deploy:
       resources:
         limits:
@@ -321,7 +321,7 @@ services:
 
   # Frontend Proxy (Envoy)
   frontendproxy:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-frontendproxy
+    image: ${IMAGE_NAME}:frontendproxy
     build:
       context: ./
       dockerfile: src/frontendproxy/Dockerfile
@@ -351,13 +351,13 @@ services:
 
   # Load Generator
   loadgenerator:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-loadgenerator
+    image: ${IMAGE_NAME}:loadgenerator
     container_name: load-generator
     build:
       context: ./
       dockerfile: ./src/loadgenerator/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-loadgenerator
+        - ${IMAGE_NAME}:loadgenerator
     deploy:
       resources:
         limits:
@@ -381,13 +381,13 @@ services:
 
   # Payment service
   paymentservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-paymentservice
+    image: ${IMAGE_NAME}:paymentservice
     container_name: payment-service
     build:
       context: ./
       dockerfile: ./src/paymentservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-paymentservice
+        - ${IMAGE_NAME}:paymentservice
     deploy:
       resources:
         limits:
@@ -408,13 +408,13 @@ services:
 
   # Product Catalog service
   productcatalogservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-productcatalogservice
+    image: ${IMAGE_NAME}:productcatalogservice
     container_name: product-catalog-service
     build:
       context: ./
       dockerfile: ./src/productcatalogservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-productcatalogservice
+        - ${IMAGE_NAME}:productcatalogservice
     deploy:
       resources:
         limits:
@@ -436,13 +436,13 @@ services:
 
   # Quote service
   quoteservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-quoteservice
+    image: ${IMAGE_NAME}:quoteservice
     container_name: quote-service
     build:
       context: ./
       dockerfile: ./src/quoteservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-quoteservice
+        - ${IMAGE_NAME}:quoteservice
     deploy:
       resources:
         limits:
@@ -462,13 +462,13 @@ services:
 
   # Recommendation service
   recommendationservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-recommendationservice
+    image: ${IMAGE_NAME}:recommendationservice
     container_name: recommendation-service
     build:
       context: ./
       dockerfile: ./src/recommendationservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-recommendationservice
+        - ${IMAGE_NAME}:recommendationservice
     deploy:
       resources:
         limits:
@@ -496,13 +496,13 @@ services:
 
   # Shipping service
   shippingservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-shippingservice
+    image: ${IMAGE_NAME}:shippingservice
     container_name: shipping-service
     build:
       context: ./
       dockerfile: ./src/shippingservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-shippingservice
+        - ${IMAGE_NAME}:shippingservice
     deploy:
       resources:
         limits:
@@ -546,13 +546,13 @@ services:
 
   # Kafka used by Checkout, Accounting, and Fraud Detection services
   kafka:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-kafka
+    image: ${IMAGE_NAME}:kafka
     container_name: kafka
     build:
       context: ./
       dockerfile: ./src/kafka/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-kafka
+        - ${IMAGE_NAME}:kafka
     deploy:
       resources:
         limits:
@@ -696,7 +696,7 @@ services:
   # *****
   # Frontend Tests
   frontendTests:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-frontend-tests
+    image: ${IMAGE_NAME}:frontend-tests
     container_name: frontend-tests
     build:
       context: ./
@@ -715,7 +715,7 @@ services:
 
   # Integration Tests
   integrationTests:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-integrationTests
+    image: ${IMAGE_NAME}:integrationTests
     container_name: integrationTests
     profiles:
       - tests
