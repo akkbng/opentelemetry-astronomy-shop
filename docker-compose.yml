@@ -617,8 +617,12 @@ services:
 
   # Grafana
   grafana:
-    image: grafana/grafana:9.1.0
+    image: grafana/grafana:9.4.7
     container_name: grafana
+    deploy:
+      resources:
+        limits:
+          memory: 100M
     volumes:
       - ./src/grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./src/grafana/provisioning/:/etc/grafana/provisioning/
@@ -630,7 +634,7 @@ services:
 
   # OpenTelemetry Collector
   otelcol:
-    image: otel/opentelemetry-collector-contrib:0.70.0
+    image: otel/opentelemetry-collector-contrib:0.76.1
     container_name: otel-col
     deploy:
       resources:
