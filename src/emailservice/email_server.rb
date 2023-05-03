@@ -33,10 +33,10 @@ post "/send_order_confirmation" do
   current_span = OpenTelemetry::Trace.current_span
   current_span.add_attributes({
     "app.order.id" => data.order.order_id,
+    "tilt.dataDisclosed.category" => "order id",
+    "tilt.dataDisclosed.legalBases.reference" => "GDPR-99-1-a",
+    "tilt.dataDisclosed.purposes.purpose" => "To identify the user orders",
   })
-  current_span.set_attribute("tilt.dataDisclosed.category", "order id")
-  current_span.set_attribute("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a")
-  current_span.set_attribute("tilt.dataDisclosed.purposes.purpose", "To identify the user orders")
 
   send_email(data)
 
