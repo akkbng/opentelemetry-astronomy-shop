@@ -288,7 +288,7 @@ func (cs *checkoutService) PlaceOrder(ctx context.Context, req *pb.PlaceOrderReq
 		attribute.Float64("app.order.amount", totalPriceFloat),
 		attribute.Int("app.order.items.count", len(prep.orderItems)),
 
-		attribute.String("tilt.dataDisclosed.catorgory", "order id"),
+		attribute.String("tilt.dataDisclosed.category", "order id"),
 		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"),
 		attribute.String("tilt.dataDisclosed.purposes.purpose", "order id is required to fulfill the order"),
 
