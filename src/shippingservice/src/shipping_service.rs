@@ -72,6 +72,9 @@ impl ShippingService for ShippingServer {
 
         span.add_event("Processing get quote request".to_string(), vec![]);
         span.set_attribute(KeyValue::new("app.shipping.zip_code", request_message.address.unwrap().zip_code));
+        span.set_attribute(KeyValue::new("tilt.dataDisclosed.category", "zip code of the order"));
+        span.set_attribute(KeyValue::new("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a");
+        span.set_attribute(KeyValue::new("tilt.dataDisclosed.purposes.purpose", "To ship the order to the customer"));
 
         let cx = Context::current_with_span(span);
         let q = match create_quote_from_count(itemct)
@@ -113,6 +116,9 @@ impl ShippingService for ShippingServer {
 
         let tid = create_tracking_id();
         span.set_attribute(KeyValue::new("app.shipping.tracking.id", tid.clone()));
+        span.set_attribute(KeyValue::new("tilt.dataDisclosed.category", "tracking id of the order"));
+        span.set_attribute(KeyValue::new("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a");
+        span.set_attribute(KeyValue::new("tilt.dataDisclosed.purposes.purpose", "To ship the order to the customer"));
         info!("Tracking ID Created: {}", tid);
 
         span.add_event(

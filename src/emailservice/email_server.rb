@@ -34,6 +34,9 @@ post "/send_order_confirmation" do
   current_span.add_attributes({
     "app.order.id" => data.order.order_id,
   })
+  current_span.set_attribute("tilt.dataDisclosed.category", "order id")
+  current_span.set_attribute("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a")
+  current_span.set_attribute("tilt.dataDisclosed.purposes.purpose", "To identify the user orders")
 
   send_email(data)
 
@@ -55,6 +58,9 @@ def send_email(data)
       via:      :test
     )
     span.set_attribute("app.email.recipient", data.email)
+    span.set_attribute("tilt.dataDisclosed.catorgory", "email")
+    span.set_attribute("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a")
+    span.set_attribute("tilt.dataDisclosed.purposes.purpose", "To send order confirmation email")
     puts "Order confirmation email sent to: #{data.email}"
   end
   # manually created spans need to be ended

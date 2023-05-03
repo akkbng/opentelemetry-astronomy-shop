@@ -39,7 +39,10 @@ module.exports.charge = request => {
 
   span.setAttributes({
     'app.payment.card_type': cardType,
-    'app.payment.card_valid': valid
+    'app.payment.card_valid': valid,
+    'tilt.dataDisclosed.category': 'Credit Card',
+    'tilt.dataDisclosed.legalBases.reference': 'GDPR-6(1)(b)',
+    'tilt.dataDisclosed.purposes.purpose': 'Processing is necessary for the performance of a contract to which the data subject is party or in order to take steps at the request of the data subject prior to entering into a contract.',
   });
 
   if (!valid) {

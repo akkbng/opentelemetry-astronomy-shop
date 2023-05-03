@@ -36,6 +36,11 @@ namespace cartservice.services
             activity?.SetTag("app.user.id", request.UserId);
             activity?.SetTag("app.product.id", request.Item.ProductId);
             activity?.SetTag("app.product.quantity", request.Item.Quantity);
+            activity?.SetTag("tilt.dataDisclosed.category", "user id");
+            activity?.SetTag("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a");
+            activity?.SetTag("tilt.dataDisclosed.purposes.purpose", "To track the user's cart");
+
+
 
             await _cartStore.AddItemAsync(request.UserId, request.Item.ProductId, request.Item.Quantity);
             return Empty;
@@ -45,6 +50,10 @@ namespace cartservice.services
         {
             var activity = Activity.Current;
             activity?.SetTag("app.user.id", request.UserId);
+            activity?.SetTag("tilt.dataDisclosed.category", "user id");
+            activity?.SetTag("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a");
+            activity?.SetTag("tilt.dataDisclosed.purposes.purpose", "To track the user's cart");
+
             activity?.AddEvent(new("Fetch cart"));
 
             var cart = await _cartStore.GetCartAsync(request.UserId);
@@ -62,6 +71,10 @@ namespace cartservice.services
         {
             var activity = Activity.Current;
             activity?.SetTag("app.user.id", request.UserId);
+            activity?.SetTag("tilt.dataDisclosed.category", "user id");
+            activity?.SetTag("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a");
+            activity?.SetTag("tilt.dataDisclosed.purposes.purpose", "To track the user's cart");
+            
             activity?.AddEvent(new("Empty cart"));
 
             await _cartStore.EmptyCartAsync(request.UserId);

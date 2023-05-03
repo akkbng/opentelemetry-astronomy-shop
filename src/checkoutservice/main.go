@@ -214,6 +214,10 @@ func (cs *checkoutService) PlaceOrder(ctx context.Context, req *pb.PlaceOrderReq
 	span.SetAttributes(
 		attribute.String("app.user.id", req.UserId),
 		attribute.String("app.user.currency", req.UserCurrency),
+
+		attribute.String("tilt.dataDisclosed.category", "user id"),
+		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"),
+		attribute.String("tilt.dataDisclosed.purposes.purpose", "user id for order placement"),
 	)
 	log.Infof("[PlaceOrder] user_id=%q user_currency=%q", req.UserId, req.UserCurrency)
 
@@ -250,14 +254,20 @@ func (cs *checkoutService) PlaceOrder(ctx context.Context, req *pb.PlaceOrderReq
 	}
 	log.Infof("payment went through (transaction_id: %s)", txID)
 	span.AddEvent("charged",
-		trace.WithAttributes(attribute.String("app.payment.transaction.id", txID)))
+		trace.WithAttributes(attribute.String("app.payment.transaction.id", txID),
+			attribute.String("tilt.dataDisclosed.category", "transaction id"),
+			attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"),
+			attribute.String("tilt.dataDisclosed.purposes.purpose", "transaction id for order placement")))
 
 	shippingTrackingID, err := cs.shipOrder(ctx, req.Address, prep.cartItems)
 	if err != nil {
 		return nil, status.Errorf(codes.Unavailable, "shipping error: %+v", err)
 	}
 	shippingTrackingAttribute := attribute.String("app.shipping.tracking.id", shippingTrackingID)
-	span.AddEvent("shipped", trace.WithAttributes(shippingTrackingAttribute))
+	span.AddEvent("shipped", trace.WithAttributes(shippingTrackingAttribute,
+		attribute.String("tilt.dataDisclosed.category", "tracking id"),
+		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"),
+		attribute.String("tilt.dataDisclosed.purposes.purpose", "tracking id for order placement")))
 
 	_ = cs.emptyUserCart(ctx, req.UserId)
 
@@ -277,6 +287,11 @@ func (cs *checkoutService) PlaceOrder(ctx context.Context, req *pb.PlaceOrderReq
 		attribute.Float64("app.shipping.amount", shippingCostFloat),
 		attribute.Float64("app.order.amount", totalPriceFloat),
 		attribute.Int("app.order.items.count", len(prep.orderItems)),
+
+		attribute.String("tilt.dataDisclosed.catorgory", "order id"),
+		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"),
+		attribute.String("tilt.dataDisclosed.purposes.purpose", "order id is required to fulfill the order"),
+
 		shippingTrackingAttribute,
 	)
 
