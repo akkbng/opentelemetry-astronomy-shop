@@ -58,7 +58,7 @@ def send_email(data)
       via:      :test
     )
     span.set_attribute("app.email.recipient", data.email)
-    span.set_attribute("tilt.dataDisclosed.catorgory", "email")
+    span.set_attribute("tilt.dataDisclosed.category", "email")
     span.set_attribute("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a")
     span.set_attribute("tilt.dataDisclosed.purposes.purpose", "To send order confirmation email")
     puts "Order confirmation email sent to: #{data.email}"
