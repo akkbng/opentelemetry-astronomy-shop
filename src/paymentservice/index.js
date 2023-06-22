@@ -25,8 +25,12 @@ function chargeServiceHandler(call, callback) {
 
   try {
     const amount = call.request.amount
+
     span.setAttributes({
-      'app.payment.amount': parseFloat(`${amount.units}.${amount.nanos}`)
+      'app.payment.amount': parseFloat(`${amount.units}.${amount.nanos}`),
+      'tilt.dataDisclosed.category': 'Credit Card',
+      'tilt.dataDisclosed.legalBases.reference': 'GDPR-6(1)(b)',
+      'tilt.dataDisclosed.purposes.purpose': 'Processing is necessary for the performance of a contract to which the data subject is party or in order to take steps at the request of the data subject prior to entering into a contract.',
     })
     logger.info({ request: call.request }, "Charge request received.")
 

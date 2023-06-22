@@ -38,7 +38,14 @@ post "/send_order_confirmation" do
     "tilt.dataDisclosed.purposes.purpose" => "To identify the user orders"
   })
 
-  send_email(data)
+  tracer = OpenTelemetry.tracer_provider.tracer('emailservice')
+  tracer.in_span("send_email_confirmation") do |span|
+    span.set_attribute("app.email.recipient", data.email)
+    span.set_attribute("tilt.dataDisclosed.category", "email")
+    span.set_attribute("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a")
+    span.set_attribute("tilt.dataDisclosed.purposes.purpose", "To send order confirmation email")
+    send_email(data)
+  end
 
 end
 
@@ -57,10 +64,6 @@ def send_email(data)
       body:     erb(:confirmation, locals: { order: data.order }),
       via:      :test
     )
-    span.set_attribute("app.email.recipient", data.email)
-    span.set_attribute("tilt.dataDisclosed.category", "email")
-    span.set_attribute("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a")
-    span.set_attribute("tilt.dataDisclosed.purposes.purpose", "To send order confirmation email")
     puts "Order confirmation email sent to: #{data.email}"
   end
   # manually created spans need to be ended
