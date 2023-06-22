@@ -35,7 +35,7 @@ post "/send_order_confirmation" do
     "app.order.id" => data.order.order_id,
     "tilt.dataDisclosed.category" => ["order id","email"],
     "tilt.dataDisclosed.legalBases.reference" => ["GDPR-99-1-a","GDPR-21-a"],
-    "tilt.dataDisclosed.purposes.purpose" => ["To identify the user orders", "To send order confirmation email"]
+    "tilt.dataDisclosed.purposes.purpose" => ["To identify the user orders", "To send order confirmation email"],
   })
 
   send_email(data)
