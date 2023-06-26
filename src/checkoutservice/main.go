@@ -450,6 +450,9 @@ func (cs *checkoutService) convertCurrency(ctx context.Context, from *pb.Money, 
 }
 
 func (cs *checkoutService) chargeCard(ctx context.Context, amount *pb.Money, paymentInfo *pb.CreditCardInfo) (string, error) {
+	ctx, span := tracer.Start(ctx, "chargeCard")
+	defer span.End()
+
 	conn, err := createClient(ctx, cs.paymentSvcAddr)
 	if err != nil {
 		return "", fmt.Errorf("failed to connect payment service: %+v", err)
@@ -462,10 +465,9 @@ func (cs *checkoutService) chargeCard(ctx context.Context, amount *pb.Money, pay
 	if err != nil {
 		return "", fmt.Errorf("could not charge the card: %+v", err)
 	}
-	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(
 		attribute.String("tilt.dataDisclosed.category", "transaction id"),
-		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"),
+		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-6-1-a"),
 		attribute.String("tilt.dataDisclosed.purposes.purpose", "transaction id for order placement"),
 	)
 	return paymentResp.GetTransactionId(), nil
@@ -494,6 +496,8 @@ func (cs *checkoutService) sendOrderConfirmation(ctx context.Context, email stri
 }
 
 func (cs *checkoutService) shipOrder(ctx context.Context, address *pb.Address, items []*pb.CartItem) (string, error) {
+	ctx, span := tracer.Start(ctx, "shipOrder")
+	defer span.End()
 	conn, err := createClient(ctx, cs.shippingSvcAddr)
 	if err != nil {
 		return "", fmt.Errorf("failed to connect email service: %+v", err)
@@ -505,7 +509,6 @@ func (cs *checkoutService) shipOrder(ctx context.Context, address *pb.Address, i
 	if err != nil {
 		return "", fmt.Errorf("shipment failed: %+v", err)
 	}
-	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(
 		attribute.String("tilt.dataDisclosed.category", "tracking id"),
 		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-8-1-a"),
