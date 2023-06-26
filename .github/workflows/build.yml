@@ -46,9 +46,9 @@ jobs:
           # - file: ./src/loadgenerator/Dockerfile
           #   tag_suffix: loadgenerator
           #   context: ./
-          # - file: ./src/paymentservice/Dockerfile
-          #   tag_suffix: paymentservice
-          #   context: ./
+          - file: ./src/paymentservice/Dockerfile
+            tag_suffix: paymentservice
+            context: ./
           # - file: ./src/productcatalogservice/Dockerfile
           #   tag_suffix: productcatalogservice
           #   context: ./

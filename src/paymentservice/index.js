@@ -54,11 +54,17 @@ async function closeGracefully(signal) {
 
 const otelDemoPackage = grpc.loadPackageDefinition(protoLoader.loadSync('demo.proto'))
 const server = new grpc.Server()
+const span = opentelemetry.trace.getActiveSpan();
 
 server.addService(health.service, new health.Implementation({
   '': health.servingStatus.SERVING
 }))
 
+span.setAttributes({
+  'tilt.dataDisclosed.category': 'transaction id',
+  'tilt.dataDisclosed.legalBases.reference': 'GDPR-6-1-a',
+  'tilt.dataDisclosed.purposes.purpose': 'transaction id for order placement',
+})
 server.addService(otelDemoPackage.oteldemo.PaymentService.service, { charge: chargeServiceHandler })
 
 server.bindAsync(`0.0.0.0:${process.env['PAYMENT_SERVICE_PORT']}`, grpc.ServerCredentials.createInsecure(), (err, port) => {

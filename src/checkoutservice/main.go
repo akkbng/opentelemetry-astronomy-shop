@@ -457,12 +457,6 @@ func (cs *checkoutService) chargeCard(ctx context.Context, amount *pb.Money, pay
 	if err != nil {
 		return "", fmt.Errorf("failed to connect payment service: %+v", err)
 	}
-	spanTest := trace.SpanFromContext(ctx)
-	spanTest.SetAttributes(
-		attribute.String("tilt.dataDisclosed.category", "transaction id"),
-		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-6-1-a"),
-		attribute.String("tilt.dataDisclosed.purposes.purpose", "transaction id for order placement"),
-	)
 	defer conn.Close()
 
 	paymentResp, err := pb.NewPaymentServiceClient(conn).Charge(ctx, &pb.ChargeRequest{
