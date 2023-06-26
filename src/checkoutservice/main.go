@@ -253,20 +253,14 @@ func (cs *checkoutService) PlaceOrder(ctx context.Context, req *pb.PlaceOrderReq
 		return nil, status.Errorf(codes.Internal, "failed to charge card: %+v", err)
 	}
 	log.Infof("payment went through (transaction_id: %s)", txID)
-	span.AddEvent("charged", trace.WithAttributes(attribute.String("app.payment.transaction.id", txID),
-		attribute.String("tilt.dataDisclosed.category", "transaction id"),
-		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"),
-		attribute.String("tilt.dataDisclosed.purposes.purpose", "transaction id for order placement")))
+	span.AddEvent("charged", trace.WithAttributes(attribute.String("app.payment.transaction.id", txID)))
 
 	shippingTrackingID, err := cs.shipOrder(ctx, req.Address, prep.cartItems)
 	if err != nil {
 		return nil, status.Errorf(codes.Unavailable, "shipping error: %+v", err)
 	}
 	shippingTrackingAttribute := attribute.String("app.shipping.tracking.id", shippingTrackingID)
-	span.AddEvent("shipped", trace.WithAttributes(shippingTrackingAttribute,
-		attribute.String("tilt.dataDisclosed.category", "tracking id"),
-		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"),
-		attribute.String("tilt.dataDisclosed.purposes.purpose", "tracking id for order placement")))
+	span.AddEvent("shipped", trace.WithAttributes(shippingTrackingAttribute))
 
 	_ = cs.emptyUserCart(ctx, req.UserId)
 
@@ -386,6 +380,15 @@ func (cs *checkoutService) getUserCart(ctx context.Context, userID string) ([]*p
 	defer conn.Close()
 
 	cart, err := pb.NewCartServiceClient(conn).GetCart(ctx, &pb.GetCartRequest{UserId: userID})
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(
+		attribute.String("app.user.id", userID),
+
+		attribute.String("tilt.dataDisclosed.category", "user id"),
+		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-6-1-a"),
+		attribute.String("tilt.dataDisclosed.purposes.purpose", "user id getting user cart"),
+	)
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user cart during checkout: %+v", err)
 	}
@@ -459,6 +462,12 @@ func (cs *checkoutService) chargeCard(ctx context.Context, amount *pb.Money, pay
 	if err != nil {
 		return "", fmt.Errorf("could not charge the card: %+v", err)
 	}
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(
+		attribute.String("tilt.dataDisclosed.category", "transaction id"),
+		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"),
+		attribute.String("tilt.dataDisclosed.purposes.purpose", "transaction id for order placement"),
+	)
 	return paymentResp.GetTransactionId(), nil
 }
 
@@ -496,6 +505,12 @@ func (cs *checkoutService) shipOrder(ctx context.Context, address *pb.Address, i
 	if err != nil {
 		return "", fmt.Errorf("shipment failed: %+v", err)
 	}
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(
+		attribute.String("tilt.dataDisclosed.category", "tracking id"),
+		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-8-1-a"),
+		attribute.String("tilt.dataDisclosed.purposes.purpose", "tracking id for order placement"),
+	)
 	return resp.GetTrackingId(), nil
 }
 

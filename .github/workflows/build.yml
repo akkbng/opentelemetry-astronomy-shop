@@ -22,9 +22,9 @@ jobs:
           # - file: ./src/adservice/Dockerfile
           #   tag_suffix: adservice
           #   context: ./
-          - file: ./src/cartservice/src/Dockerfile
-            tag_suffix: cartservice
-            context: ./
+          # - file: ./src/cartservice/src/Dockerfile
+          #   tag_suffix: cartservice
+          #   context: ./
           - file: ./src/checkoutservice/Dockerfile
             tag_suffix: checkoutservice
             context: ./
@@ -70,12 +70,12 @@ jobs:
           # - file: ./src/frauddetectionservice/Dockerfile
           #   tag_suffix: frauddetectionservice
           #   context: ./
-          - file: ./src/frontend/Dockerfile.cypress
-            tag_suffix: frontend-tests
-            context: ./
-          - file: ./test/Dockerfile
-            tag_suffix: integrationTests
-            context: ./
+          # - file: ./src/frontend/Dockerfile.cypress
+          #   tag_suffix: frontend-tests
+          #   context: ./
+          # - file: ./test/Dockerfile
+          #   tag_suffix: integrationTests
+          #   context: ./
 
     steps:
       - uses: actions/checkout@v3
