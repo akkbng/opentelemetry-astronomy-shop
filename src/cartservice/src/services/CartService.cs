@@ -52,7 +52,7 @@ namespace cartservice.services
             activity?.SetTag("app.user.id", request.UserId);
             activity?.SetTag("tilt.dataDisclosed.category", "user id");
             activity?.SetTag("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a");
-            activity?.SetTag("tilt.dataDisclosed.purposes.purpose", "To track the user's cart");
+            activity?.SetTag("tilt.dataDisclosed.purposes.purpose", "To fetch the user's cart");
 
             activity?.AddEvent(new("Fetch cart"));
 
@@ -73,7 +73,7 @@ namespace cartservice.services
             activity?.SetTag("app.user.id", request.UserId);
             activity?.SetTag("tilt.dataDisclosed.category", "user id");
             activity?.SetTag("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a");
-            activity?.SetTag("tilt.dataDisclosed.purposes.purpose", "To track the user's cart");
+            activity?.SetTag("tilt.dataDisclosed.purposes.purpose", "To empty the user's cart");
             
             activity?.AddEvent(new("Empty cart"));
 

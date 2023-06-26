@@ -253,11 +253,10 @@ func (cs *checkoutService) PlaceOrder(ctx context.Context, req *pb.PlaceOrderReq
 		return nil, status.Errorf(codes.Internal, "failed to charge card: %+v", err)
 	}
 	log.Infof("payment went through (transaction_id: %s)", txID)
-	span.AddEvent("charged",
-		trace.WithAttributes(attribute.String("app.payment.transaction.id", txID),
-			attribute.String("tilt.dataDisclosed.category", "transaction id"),
-			attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"),
-			attribute.String("tilt.dataDisclosed.purposes.purpose", "transaction id for order placement")))
+	span.AddEvent("charged", trace.WithAttributes(attribute.String("app.payment.transaction.id", txID),
+		attribute.String("tilt.dataDisclosed.category", "transaction id"),
+		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"),
+		attribute.String("tilt.dataDisclosed.purposes.purpose", "transaction id for order placement")))
 
 	shippingTrackingID, err := cs.shipOrder(ctx, req.Address, prep.cartItems)
 	if err != nil {
