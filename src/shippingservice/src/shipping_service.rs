@@ -116,7 +116,7 @@ impl ShippingService for ShippingServer {
 
         let tid = create_tracking_id();
         span.set_attribute(KeyValue::new("app.shipping.tracking.id", tid.clone()));
-        span.set_attribute(KeyValue::new("tilt.dataDisclosed.category", "tracking id of the order"));
+        span.set_attribute(KeyValue::new("tilt.dataDisclosed.category", "tracking id"));
         span.set_attribute(KeyValue::new("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"));
         span.set_attribute(KeyValue::new("tilt.dataDisclosed.purposes.purpose", "To ship the order to the customer"));
         info!("Tracking ID Created: {}", tid);

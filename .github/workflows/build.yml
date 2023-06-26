@@ -55,9 +55,9 @@ jobs:
           # - file: ./src/quoteservice/Dockerfile
           #   tag_suffix: quoteservice
           #   context: ./
-          # - file: ./src/shippingservice/Dockerfile
-          #   tag_suffix: shippingservice
-          #   context: ./
+          - file: ./src/shippingservice/Dockerfile
+            tag_suffix: shippingservice
+            context: ./
           # - file: ./src/recommendationservice/Dockerfile
           #   tag_suffix: recommendationservice
           #   context: ./

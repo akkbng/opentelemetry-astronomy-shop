@@ -355,6 +355,34 @@ func createClient(ctx context.Context, svcAddr string) (*grpc.ClientConn, error)
 	)
 }
 
+func createPaymentClient(ctx context.Context, svcAddr string) (*grpc.ClientConn, error) {
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(
+		attribute.String("tilt.dataDisclosed.category", "transaction id"),
+		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-6-1-a"),
+		attribute.String("tilt.dataDisclosed.purposes.purpose", "transaction id for order placement"),
+	)
+	return grpc.DialContext(ctx, svcAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()),
+		grpc.WithStreamInterceptor(otelgrpc.StreamClientInterceptor()),
+	)
+}
+
+func createShipmentClient(ctx context.Context, svcAddr string) (*grpc.ClientConn, error) {
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(
+		attribute.String("tilt.dataDisclosed.category", "tracking id"),
+		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-8-1-a"),
+		attribute.String("tilt.dataDisclosed.purposes.purpose", "tracking id for order placement"),
+	)
+	return grpc.DialContext(ctx, svcAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()),
+		grpc.WithStreamInterceptor(otelgrpc.StreamClientInterceptor()),
+	)
+}
+
 func (cs *checkoutService) quoteShipping(ctx context.Context, address *pb.Address, items []*pb.CartItem) (*pb.Money, error) {
 	conn, err := createClient(ctx, cs.shippingSvcAddr)
 	if err != nil {
@@ -453,7 +481,7 @@ func (cs *checkoutService) chargeCard(ctx context.Context, amount *pb.Money, pay
 	ctx, span := tracer.Start(ctx, "chargeCard")
 	defer span.End()
 
-	conn, err := createClient(ctx, cs.paymentSvcAddr)
+	conn, err := createPaymentClient(ctx, cs.paymentSvcAddr)
 	if err != nil {
 		return "", fmt.Errorf("failed to connect payment service: %+v", err)
 	}
@@ -475,6 +503,13 @@ func (cs *checkoutService) chargeCard(ctx context.Context, amount *pb.Money, pay
 }
 
 func (cs *checkoutService) sendOrderConfirmation(ctx context.Context, email string, order *pb.OrderResult) error {
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(
+		attribute.String("app.user.email", email),
+		attribute.String("tilt.dataDisclosed.category", "customer email"),
+		attribute.String("tilt.dataDisclosed.legalBases.reference", "GDPR-99-1-a"),
+		attribute.String("tilt.dataDisclosed.purposes.purpose", "To send order confirmation email"),
+	)
 	emailServicePayload, err := json.Marshal(map[string]interface{}{
 		"email": email,
 		"order": order,
@@ -499,7 +534,7 @@ func (cs *checkoutService) sendOrderConfirmation(ctx context.Context, email stri
 func (cs *checkoutService) shipOrder(ctx context.Context, address *pb.Address, items []*pb.CartItem) (string, error) {
 	ctx, span := tracer.Start(ctx, "shipOrder")
 	defer span.End()
-	conn, err := createClient(ctx, cs.shippingSvcAddr)
+	conn, err := createShipmentClient(ctx, cs.shippingSvcAddr)
 	if err != nil {
 		return "", fmt.Errorf("failed to connect email service: %+v", err)
 	}
