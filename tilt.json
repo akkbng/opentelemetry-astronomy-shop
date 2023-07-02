@@ -61,7 +61,7 @@
 		},
         {
 			"_id": "shippingservice",
-			"category": "user address; tracking id",
+			"category": "user address",
 			"purposes": [
 				{
 					"purpose": "To ship the order to the customer",
@@ -177,7 +177,6 @@
 		},
 				{
 			"_id": "emailservice",
-			"category": "customer email",
 			"purposes": [
 				{
 					"purpose": "Communication management",
@@ -231,7 +230,7 @@
 		},
 		{
 			"_id": "cartservice",
-			"category": "user id",
+			"category": "",
 			"purposes": [
 				{
 					"purpose": "To track the user's cart",
